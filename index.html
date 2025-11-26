@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Actions Deployment</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; background-color: #f0f8ff; }
+        h1 { color: #0078d4; }
+        p { color: #333; }
+        .footer { margin-top: 50px; font-size: 0.8em; color: #888; }
+    </style>
+</head>
+<body>
+    <h1>Deployment Successful via GitHub Actions!</h1>
+    <p>This application was automatically built and deployed to Azure App Service.</p>
+    <div class="footer">
+        Deployed on: <span id="deployment-time"></span>
+    </div>
+
+    <script>
+        document.getElementById('deployment-time').textContent = new Date().toISOString();
+    </script>
+</body>
+</html>
