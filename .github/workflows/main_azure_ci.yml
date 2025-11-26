@@ -1,0 +1,53 @@
+name: Deploy Web App to Azure App Service
+
+on:
+  push:
+    # Trigger this workflow whenever code is pushed to the 'main' branch
+    branches:
+      - main
+  workflow_dispatch:
+    # Allows manual triggering from the GitHub Actions tab
+
+env:
+  # Environment variables for easy reference
+  AZURE_WEBAPP_NAME: 'githubActionWebApp'   # **CRITICAL: REPLACE with your Azure Web App name**
+  AZURE_WEBAPP_PACKAGE_PATH: '.'                   # The path to your application code (root of the repo in this case)
+
+jobs:
+  build-and-deploy:
+    # This job performs the core CI/CD tasks
+    runs-on: ubuntu-latest
+    steps:
+    
+    # --- Step 1: Checkout Code ---
+    - name: 'Checkout Repository Code'
+      uses: actions/checkout@v4
+      # Purpose: This action downloads the source code from your GitHub repository 
+      # onto the temporary runner machine so that subsequent steps can access the files.
+
+    # --- Step 2: Set up Build Environment (Optional for static HTML, mandatory for Node/Python/etc.) ---
+    # Since our demo is just static HTML, we can skip node/npm setup, but for real apps...
+    #- name: 'Setup Node.js Environment'
+    #  uses: actions/setup-node@v4
+    #  with:
+    #    node-version: '18.x' # Use the version matching your Azure App Service setting
+    #  Purpose: Initializes the environment with the required language runtime (e.g., Node, Python) 
+    #  and adds tools like npm/pip to the system PATH.
+      
+    # --- Step 3: Build Application (Optional for static HTML, mandatory for React/Vue/etc.) ---
+    # For a simple static HTML file, no build step is needed. For a React app, this would be:
+    #- name: 'Run Build Process (e.g., npm build)'
+    #  run: npm install && npm run build
+    #  Purpose: Executes the application's build process (e.g., compiling TypeScript, bundling React, 
+    #  or generating static assets) and prepares the deployment artifact.
+
+    # --- Step 4: Deploy to Azure App Service ---
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        # Credentials are retrieved securely from the GitHub repository secret
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      # Purpose: This is the main CD action. It authenticates with Azure using the secret
+      # and copies the contents of the 'package' directory (our code) to the running Azure Web App instance.
