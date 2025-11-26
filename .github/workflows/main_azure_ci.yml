@@ -11,7 +11,7 @@ on:
 env:
   # Environment variables for easy reference
   AZURE_WEBAPP_NAME: githubActionWebApp   # **CRITICAL: REPLACE with your Azure Web App name**
-  AZURE_WEBAPP_PACKAGE_PATH: './publish'                   # The path to your application code (root of the repo in this case)
+  AZURE_WEBAPP_PACKAGE_PATH: '.'                   # The path to your application code (root of the repo in this case)
 
 jobs:
   build-and-deploy:
